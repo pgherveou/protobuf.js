@@ -1,7 +1,5 @@
 // DO NOT EDIT! This is a generated file. Edit the JSDoc in src/*.js instead and run 'npm run types'.
 
-import * as Long from "long";
-
 export as namespace protobuf;
 
 /**
@@ -2615,18 +2613,20 @@ export class BufferWriter extends Writer {
     constructor();
 
     /**
-     * Allocates a buffer of the specified size.
-     * @param size Buffer size
-     * @returns Buffer
-     */
-    public static alloc(size: number): Buffer;
-
-    /**
      * Finishes the write operation.
      * @returns Finished buffer
      */
     public finish(): Buffer;
 }
+
+/**
+ * Allocates a buffer of the specified size.
+ * <<<<<<< HEAD
+ * =======
+ * @param size Buffer size
+ * @returns Buffer
+ */
+export function >>>>>>> upstream/master(size: number): Buffer;
 
 /**
  * Callback as used by {@link util.asPromise}.
