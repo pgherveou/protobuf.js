@@ -20,6 +20,10 @@ function BufferWriter() {
 BufferWriter._configure = function () {
     /**
      * Allocates a buffer of the specified size.
+<<<<<<< HEAD
+=======
+     * @function
+>>>>>>> upstream/master
      * @param {number} size Buffer size
      * @returns {Buffer} Buffer
      */
@@ -56,8 +60,10 @@ BufferWriter.prototype.bytes = function write_bytes_buffer(value) {
 function writeStringBuffer(val, buf, pos) {
     if (val.length < 40) // plain js is faster for short strings (probably due to redundant assertions)
         util.utf8.write(val, buf, pos);
+    else if (buf.utf8Write)
+        buf.utf8Write(val, pos);
     else
-        buf.utf8Write ? buf.utf8Write(val, pos) : buf.write(val, pos);
+        buf.write(val, pos);
 }
 
 /**
