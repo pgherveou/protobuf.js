@@ -94,16 +94,6 @@ Root.prototype.load = function load(filename, options, callback) {
             throw err;
         cb(err, root);
     }
-	
-    // Bundled definition existence checking
-    function getBundledFileName(filename) {
-        var idx = filename.lastIndexOf("google/protobuf/");
-        if (idx > -1) {
-            var altname = filename.substring(idx);
-            if (altname in common) return altname; 
-        }
-        return null;
-    }
 
     // Bundled definition existence checking
     function getBundledFileName(filename) {
