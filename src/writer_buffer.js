@@ -20,10 +20,7 @@ function BufferWriter() {
 BufferWriter._configure = function () {
     /**
      * Allocates a buffer of the specified size.
-<<<<<<< HEAD
-=======
      * @function
->>>>>>> upstream/master
      * @param {number} size Buffer size
      * @returns {Buffer} Buffer
      */

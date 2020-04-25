@@ -1,6 +1,6 @@
 /*!
  * protobuf.js v1.0.2 (c) 2016, daniel wirtz
- * compiled sat, 25 apr 2020 17:56:16 utc
+ * compiled sat, 25 apr 2020 18:04:38 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -2628,10 +2628,7 @@ function BufferWriter() {
 BufferWriter._configure = function () {
     /**
      * Allocates a buffer of the specified size.
-<<<<<<< HEAD
-=======
      * @function
->>>>>>> upstream/master
      * @param {number} size Buffer size
      * @returns {Buffer} Buffer
      */
