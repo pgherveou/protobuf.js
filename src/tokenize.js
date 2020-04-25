@@ -413,7 +413,7 @@ function tokenize(source, alternateCommentMode) {
                 ret = commentText;
                 commentText = null
             }
-        } else {            
+        } else {
             /* istanbul ignore else */
             if (commentLine < trailingLine) {
                 trailerCommentText = true;

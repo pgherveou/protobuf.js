@@ -1,6 +1,6 @@
 /*!
- * protobuf.js v1.0.2 (c) 2016, daniel wirtz
- * compiled sat, 25 apr 2020 18:04:38 utc
+ * protobuf.js v1.0.3 (c) 2016, daniel wirtz
+ * compiled sat, 25 apr 2020 18:19:26 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -4147,16 +4147,6 @@ Root.prototype.load = function load(filename, options, callback) {
         if (sync)
             throw err;
         cb(err, root);
-    }
-	
-    // Bundled definition existence checking
-    function getBundledFileName(filename) {
-        var idx = filename.lastIndexOf("google/protobuf/");
-        if (idx > -1) {
-            var altname = filename.substring(idx);
-            if (altname in common) return altname; 
-        }
-        return null;
     }
 
     // Bundled definition existence checking
