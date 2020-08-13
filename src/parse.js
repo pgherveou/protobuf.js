@@ -112,29 +112,29 @@ function parse(source, root, options) {
     function isNumber(number) {
         if (/[0-9]/.test(number)) {
             return number;
-        } else {
-            return false;
         }
+
+        return false;
     }
-    
+
     function readArray() {
         var values = [],
             token;
-        
-        skip("[")
-        while ((token = next()) !== ']') {
-            if (token !== undefined && token !== ',') {
+
+        skip("[");
+        while ((token = next()) !== "]") {
+            if (token !== undefined && token !== ",") {
                 switch (token) {
                     case "'":
                     case "\"":
                         push(token);
                         values.push(readString());
                         break;
-                    case "true": 
+                    case "true":
                     case "TRUE":
                         values.push(true);
                         break;
-                    case "false": 
+                    case "false":
                     case "FALSE":
                         values.push(false);
                         break;
