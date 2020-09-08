@@ -618,6 +618,8 @@ function parse(source, root, options) {
                   skip(":");
                   if (peek() === "{")
                       value = parseOptionValue(parent, name + "." + token);
+                  else if (peek() === "[")
+                      setOption(parent, name + "." + token, readArray());	
                   else {
                       value = readValue(true);
                       setOption(parent, name + "." + token, value);
