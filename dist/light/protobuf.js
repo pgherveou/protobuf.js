@@ -1,6 +1,6 @@
 /*!
- * protobuf.js v1.0.10 (c) 2016, daniel wirtz
- * compiled fri, 11 sep 2020 00:51:51 utc
+ * protobuf.js v1.0.11 (c) 2016, daniel wirtz
+ * compiled wed, 02 dec 2020 03:14:11 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -1486,7 +1486,7 @@ function decoder(mtype) {
                 ("}");
 
             if (types.long[field.keyType] !== undefined) gen
-                ("%s[typeof k===\"object\"?util.longToHash(k):k]=value", ref);
+                ("%s[typeof k===\"object\"?k.toString():k]=value", ref);
             else gen
                 ("%s[k]=value", ref);
 
