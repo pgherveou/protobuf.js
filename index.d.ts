@@ -377,6 +377,9 @@ export interface IField {
     /** Field rule */
     rule?: string;
 
+    /** Map key Field type */
+    keyType?: string;
+
     /** Field type */
     type: string;
 

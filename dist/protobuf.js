@@ -1,6 +1,6 @@
 /*!
- * protobuf.js v1.0.11 (c) 2016, daniel wirtz
- * compiled wed, 02 dec 2020 03:14:11 utc
+ * protobuf.js v1.0.12 (c) 2016, daniel wirtz
+ * compiled wed, 02 dec 2020 15:02:52 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -2454,6 +2454,7 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  * Field descriptor.
  * @interface IField
  * @property {string} [rule="optional"] Field rule
+ * @property {string} [keyType="optional"] Map key Field type
  * @property {string} type Field type
  * @property {number} id Field id
  * @property {Object.<string,*>} [options] Field options
