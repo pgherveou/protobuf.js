@@ -1068,14 +1068,20 @@ export interface IParseOptions {
     alternateCommentMode?: boolean;
 }
 
+/**
+ * @param [o]
+ * @returns {Object.<string,*> | undefined}
+ */
+type OptionFilterer = (o?: { [k: string]: any }) => ({ [k: string]: any }|undefined);
+
 /** Options modifying the behavior of JSON serialization. */
 export interface IToJSONOptions {
 
     /** Serializes comments. */
     keepComments?: boolean;
 
-    /** Serializes options. */
-    dropOptions?: boolean;
+    /** a closure used to filter unwanted options */
+    filterOptions?: OptionFilterer;
 }
 
 /**

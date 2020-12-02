@@ -222,7 +222,7 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  * Field descriptor.
  * @interface IField
  * @property {string} [rule="optional"] Field rule
- * @property {string} [keyType="optional"] Map key Field type
+ * @property {string} [keyType] Map key Field type
  * @property {string} type Field type
  * @property {number} id Field id
  * @property {Object.<string,*>} [options] Field options
@@ -242,10 +242,10 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  */
 Field.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "rule"    , this.rule !== "optional" && this.rule || undefined,
         "type"    , this.type,
         "id"      , this.id,

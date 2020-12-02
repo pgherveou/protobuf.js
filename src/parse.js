@@ -45,10 +45,16 @@ var base10Re    = /^[1-9][0-9]*$/,
  */
 
 /**
+ * @callback OptionFilterer
+ * @param {Object.<string,*>} [o]
+ * @returns {Object.<string,*> | undefined}
+ */
+
+/**
  * Options modifying the behavior of JSON serialization.
  * @interface IToJSONOptions
  * @property {boolean} [keepComments=false] Serializes comments.
- * @property {boolean} [dropOptions=false] Serializes options.
+ * @property {OptionFilterer} [filterOptions] a closure used to filter unwanted options
  */
 
 /**

@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES2018",
+        "lib": ["esnext"],
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     }

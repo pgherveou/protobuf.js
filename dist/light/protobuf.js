@@ -1,6 +1,6 @@
 /*!
  * protobuf.js v1.0.12 (c) 2016, daniel wirtz
- * compiled wed, 02 dec 2020 15:02:52 utc
+ * compiled wed, 02 dec 2020 18:58:15 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -1738,10 +1738,10 @@ Enum.fromJSON = function fromJSON(name, json) {
  */
 Enum.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options"  , filterOptions ? filterOptions(this.options)  : this.options,
         "values"   , this.values,
         "reserved" , this.reserved && this.reserved.length ? this.reserved : undefined,
         "comment"  , keepComments ? this.comment : undefined,
@@ -2053,7 +2053,7 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  * Field descriptor.
  * @interface IField
  * @property {string} [rule="optional"] Field rule
- * @property {string} [keyType="optional"] Map key Field type
+ * @property {string} [keyType] Map key Field type
  * @property {string} type Field type
  * @property {number} id Field id
  * @property {Object.<string,*>} [options] Field options
@@ -2073,10 +2073,10 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  */
 Field.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "rule"    , this.rule !== "optional" && this.rule || undefined,
         "type"    , this.type,
         "id"      , this.id,
@@ -2426,10 +2426,10 @@ MapField.fromJSON = function fromJSON(name, json) {
  */
 MapField.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "keyType" , this.keyType,
         "type"    , this.type,
         "id"      , this.id,
@@ -2745,10 +2745,10 @@ Method.fromJSON = function fromJSON(name, json) {
  */
 Method.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options"        , filterOptions ? filterOptions(this.options)  : this.options,
         "type"           , this.type !== "rpc" && /* istanbul ignore next */ this.type || undefined,
         "requestType"    , this.requestType,
         "requestStream"  , this.requestStream,
@@ -2928,10 +2928,10 @@ Object.defineProperty(Namespace.prototype, "nestedArray", {
  * @returns {INamespace} Namespace descriptor
  */
 Namespace.prototype.toJSON = function toJSON(toJSONOptions) {
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "nested"  , arrayToJSON(this.nestedArray, toJSONOptions)
     ]);
 };
@@ -3538,10 +3538,10 @@ OneOf.fromJSON = function fromJSON(name, json) {
  */
 OneOf.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "oneof"   , this.oneof,
         "comment" , keepComments ? this.comment : undefined
     ]);
@@ -4773,10 +4773,10 @@ Service.fromJSON = function fromJSON(name, json) {
 Service.prototype.toJSON = function toJSON(toJSONOptions) {
     var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : this.options,
+        "options" , filterOptions ? filterOptions(this.options)  : this.options,
         "methods" , Namespace.arrayToJSON(this.methodsArray, toJSONOptions) || /* istanbul ignore next */ {},
         "nested"  , inherited && inherited.nested || undefined,
         "comment" , keepComments ? this.comment : undefined
@@ -5158,10 +5158,11 @@ Type.fromJSON = function fromJSON(name, json) {
 Type.prototype.toJSON = function toJSON(toJSONOptions) {
     var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var options = inherited && inherited.options
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : inherited && inherited.options || undefined,
+        "options"    , filterOptions ? filterOptions(options) : options,
         "oneofs"     , Namespace.arrayToJSON(this.oneofsArray, toJSONOptions),
         "fields"     , Namespace.arrayToJSON(this.fieldsArray.filter(function(obj) { return !obj.declaringField; }), toJSONOptions) || {},
         "extensions" , this.extensions && this.extensions.length ? this.extensions : undefined,

@@ -283,10 +283,11 @@ Type.fromJSON = function fromJSON(name, json) {
 Type.prototype.toJSON = function toJSON(toJSONOptions) {
     var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var dropOptions = toJSONOptions ? Boolean(toJSONOptions.dropOptions) : false;
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var options = inherited && inherited.options
 
     return util.toObject([
-        "options"  , dropOptions ? undefined  : inherited && inherited.options || undefined,
+        "options"    , filterOptions ? filterOptions(options) : options,
         "oneofs"     , Namespace.arrayToJSON(this.oneofsArray, toJSONOptions),
         "fields"     , Namespace.arrayToJSON(this.fieldsArray.filter(function(obj) { return !obj.declaringField; }), toJSONOptions) || {},
         "extensions" , this.extensions && this.extensions.length ? this.extensions : undefined,

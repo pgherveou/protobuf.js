@@ -1,6 +1,6 @@
 {
   "name": "@pgherveou/protobufjs",
-  "version": "1.0.12",
+  "version": "2.0.0",
   "versionScheme": "~",
   "description": "Protocol Buffers for JavaScript (& TypeScript).",
   "author": "Daniel Wirtz <dcode+protobufjs@dcode.io>",
@@ -90,7 +90,7 @@
     "tape": "^5.0.0",
     "tmp": "^0.2.0",
     "tslint": "^6.0.0",
-    "typescript": "^3.7.5",
+    "typescript": "^4.1.2",
     "uglify-js": "^3.7.7",
     "vinyl-buffer": "^1.0.1",
     "vinyl-fs": "^3.0.3",
