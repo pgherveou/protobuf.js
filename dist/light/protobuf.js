@@ -1,6 +1,6 @@
 /*!
- * protobuf.js v1.0.12 (c) 2016, daniel wirtz
- * compiled wed, 02 dec 2020 18:58:15 utc
+ * protobuf.js v2.1.0 (c) 2016, daniel wirtz
+ * compiled fri, 04 dec 2020 16:48:41 utc
  * licensed under the bsd-3-clause license
  * see: https://github.com/pgherveou/protobuf.js for details
  */
@@ -1738,7 +1738,7 @@ Enum.fromJSON = function fromJSON(name, json) {
  */
 Enum.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options"  , filterOptions ? filterOptions(this.options)  : this.options,
@@ -2073,7 +2073,7 @@ Field.prototype.setOption = function setOption(name, value, ifNotSet) {
  */
 Field.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
@@ -2426,7 +2426,7 @@ MapField.fromJSON = function fromJSON(name, json) {
  */
 MapField.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
@@ -2745,7 +2745,7 @@ Method.fromJSON = function fromJSON(name, json) {
  */
 Method.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options"        , filterOptions ? filterOptions(this.options)  : this.options,
@@ -2928,7 +2928,7 @@ Object.defineProperty(Namespace.prototype, "nestedArray", {
  * @returns {INamespace} Namespace descriptor
  */
 Namespace.prototype.toJSON = function toJSON(toJSONOptions) {
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
@@ -3538,7 +3538,7 @@ OneOf.fromJSON = function fromJSON(name, json) {
  */
 OneOf.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
@@ -4185,7 +4185,32 @@ Root.fromJSON = function fromJSON(json, root) {
         root = new Root();
     if (json.options)
         root.setOptions(json.options);
-    return root.addJSON(json.nested);
+
+    // defer resolving extension to avoid making too many lookups
+    var deferredExtensions = new Set();
+    root._tryHandleExtension = function (field) {
+        deferredExtensions.add(field);
+         return true;
+    };
+
+    root.addJSON(json.nested);
+
+    var unresolvedExtensions = [];
+    deferredExtensions.forEach(function (field) {
+        if (!Root.prototype._tryHandleExtension(field)) {
+            unresolvedExtensions.push(field);
+        }
+    });
+
+    if (unresolvedExtensions.length) {
+        throw Error("unresolvable extensions: " + unresolvedExtensions.map(function (field) {
+            return "'extend " + field.extend + "' in " + field.parent.fullName;
+        }).join(", "));
+    }
+
+    root._tryHandleExtension = Root.prototype._tryHandleExtension;
+
+    return root;
 };
 
 /**
@@ -4400,13 +4425,13 @@ var exposeRe = /^[A-Z]/;
 
 /**
  * Handles a deferred declaring extension field by creating a sister field to represent it within its extended type.
- * @param {Root} root Root instance
  * @param {Field} field Declaring extension field witin the declaring type
  * @returns {boolean} `true` if successfully added to the extended type, `false` otherwise
  * @inner
  * @ignore
  */
-function tryHandleExtension(root, field) {
+
+Root.prototype._tryHandleExtension = function _tryHandleExtension(field) {
     var extendedType = field.parent.lookup(field.extend);
     if (extendedType) {
         var sisterField = new Field(field.fullName, field.id, field.type, field.rule, undefined, field.options);
@@ -4416,7 +4441,7 @@ function tryHandleExtension(root, field) {
         return true;
     }
     return false;
-}
+};
 
 /**
  * Called when any object is added to this root or its sub-namespaces.
@@ -4428,7 +4453,7 @@ Root.prototype._handleAdd = function _handleAdd(object) {
     if (object instanceof Field) {
 
         if (/* an extension field (implies not part of a oneof) */ object.extend !== undefined && /* not already handled */ !object.extensionField)
-            if (!tryHandleExtension(this, object))
+            if (!this._tryHandleExtension(object))
                 this.deferred.push(object);
 
     } else if (object instanceof Enum) {
@@ -4440,7 +4465,7 @@ Root.prototype._handleAdd = function _handleAdd(object) {
 
         if (object instanceof Type) // Try to handle any deferred extensions
             for (var i = 0; i < this.deferred.length;)
-                if (tryHandleExtension(this, this.deferred[i]))
+                if (this._tryHandleExtension(this.deferred[i]))
                     this.deferred.splice(i, 1);
                 else
                     ++i;
@@ -4773,7 +4798,7 @@ Service.fromJSON = function fromJSON(name, json) {
 Service.prototype.toJSON = function toJSON(toJSONOptions) {
     var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
@@ -5158,8 +5183,8 @@ Type.fromJSON = function fromJSON(name, json) {
 Type.prototype.toJSON = function toJSON(toJSONOptions) {
     var inherited = Namespace.prototype.toJSON.call(this, toJSONOptions);
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
-    var options = inherited && inherited.options
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
+    var options = inherited && inherited.options;
 
     return util.toObject([
         "options"    , filterOptions ? filterOptions(options) : options,

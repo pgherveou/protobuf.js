@@ -1,20 +1,11 @@
 {
     "env": {
         "node": true,
-        "browser": true
-    },
-    "globals": {
-        "ArrayBuffer": true,
-        "Uint8Array": true,
-        "Float32Array": true,
-        "Float64Array": true,
-        "define": true,
-        "global": true,
-        "XMLHttpRequest": true,
-        "Promise": true
+        "browser": true,
+        "es6": true
     },
     "parserOptions": {
-        "ecmaVersion": 2019
+        "ecmaVersion": 2019        
     },
     "extends": "eslint:recommended",
     "rules": {

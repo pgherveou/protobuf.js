@@ -1,6 +1,6 @@
 {
   "name": "@pgherveou/protobufjs",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "versionScheme": "~",
   "description": "Protocol Buffers for JavaScript (& TypeScript).",
   "author": "Daniel Wirtz <dcode+protobufjs@dcode.io>",
@@ -32,7 +32,7 @@
     "coverage": "nyc tape -r ./lib/tape-adapter tests/*.js tests/node/*.js",
     "docs": "jsdoc -c config/jsdoc.json -R README.md --verbose --pedantic",
     "lint": "npm run lint:sources && npm run lint:types",
-    "lint:sources": "eslint \"**/*.js\" -c config/eslint.json",
+    "lint:sources": "eslint \"**/*.js\"",
     "lint:types": "tslint \"**/*.d.ts\" -e \"**/node_modules/**\" -t stylish -c config/tslint.json",
     "pages": "node scripts/pages",
     "prepublish": "node scripts/prepublish",
