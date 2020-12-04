@@ -75,7 +75,7 @@ MapField.fromJSON = function fromJSON(name, json) {
  */
 MapField.prototype.toJSON = function toJSON(toJSONOptions) {
     var keepComments = toJSONOptions ? Boolean(toJSONOptions.keepComments) : false;
-    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined
+    var filterOptions = toJSONOptions ? toJSONOptions.filterOptions : undefined;
 
     return util.toObject([
         "options" , filterOptions ? filterOptions(this.options)  : this.options,
